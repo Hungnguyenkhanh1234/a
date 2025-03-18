@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tặng Thẻ Cào</title>
+    <title>Kiếm Xu Bằng Nhiệm Vụ</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,32 +12,81 @@
             padding: 20px;
         }
         .container {
+            max-width: 400px;
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: auto;
         }
-        .button {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 18px;
-            color: white;
-            background: #28a745;
-            text-decoration: none;
+        .task {
+            padding: 10px;
+            margin: 10px 0;
+            background: #fff3cd;
             border-radius: 5px;
-            margin-top: 20px;
         }
-        .button:hover {
-            background: #218838;
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Nhận Thẻ Cào Miễn Phí</h2>
-        <p>Để nhận thẻ cào, hãy hoàn thành nhiệm vụ bên dưới:</p>
-        <a href="https://share.globalmall.vn/mobile/register/index/inviter/102345" class="button">Làm Nhiệm Vụ</a>
+        <h2>Hệ thống kiếm xu</h2>
+        <p>Số xu của bạn: <strong id="points">0</strong></p>
+        <input type="text" id="user_id" placeholder="Nhập ID của bạn" required>
+        
+        <div class="task">
+            <p>✅ Đăng ký tài khoản tại <a href="https://globalmall.pro/mobile/register/index/inviter/108198" target="_blank">link 1</a> (Nhận 30 xu)</p>
+            <button onclick="earnPoints(30)">Hoàn thành</button>
+        </div>
+        
+        <div class="task">
+            <p>✅ Đăng ký tài khoản tại <a href="https://share.globalmall.vn/mobile/register/index/inviter/102345" target="_blank">link 2</a> (Nhận 30 xu)</p>
+            <button onclick="earnPoints(30)">Hoàn thành</button>
+        </div>
+        
+        <div class="task">
+            <p>✅ Xem một quảng cáo (Nhận 10 xu)</p>
+            <button onclick="earnPoints(10)">Hoàn thành</button>
+        </div>
+        
+        <div class="task">
+            <p>✅ Mời bạn bè tham gia (Nhận 50 xu)</p>
+            <button onclick="earnPoints(50)">Hoàn thành</button>
+        </div>
     </div>
+    
+    <script>
+        let points = 0;
+        function earnPoints(amount) {
+            let userId = document.getElementById("user_id").value;
+            if (!userId) {
+                alert("Vui lòng nhập ID của bạn!");
+                return;
+            }
+            
+            points += amount;
+            document.getElementById("points").innerText = points;
+            alert("Bạn đã nhận được " + amount + " xu!");
+            
+            fetch('save_points.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `user_id=${userId}&points=${amount}`
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
